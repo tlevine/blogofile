@@ -74,6 +74,10 @@ class Writer(object):
             # filesystem to be compatible with some HTTP servers.
             # So this just deletes the *contents* of output_dir
             for f in os.listdir(self.output_dir):
+                if f == '.git' and os.path.isfile(os.path.join(self.output_dir, f)):
+                    # Don't delete a git submodule
+                    continue
+
                 f = util.path_join(self.output_dir, f)
                 try:
                     os.remove(f)
