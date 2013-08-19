@@ -42,13 +42,16 @@ class TestBlogofileCommands(unittest.TestCase):
         When the `_site` directory is a submodule (contains a `.git` file),
         the `.git` file remains after the rebuild.'''
         src_dir = mkdtemp()
+        os.rmdir(src_dir)
+        self.addCleanup(shutil.rmtree, src_dir)
 
+        self._call_entry_point(['blogofile', 'init', src_dir])
+
+        os.mkdir(os.path.join(src_dir, '_site'))
         git_file = os.path.join(src_dir, '_site', '.git')
         submodule_dir = '../.git/modules/foo-site.git'
         open(git_file, 'w').write(submodule_dir)
 
-
-        self._call_entry_point(['blogofile', 'init', src_dir])
         self._call_entry_point(['blogofile', 'build', '-s', src_dir])
 
         self.assertIn(submodule_dir, open(git_file).read())
