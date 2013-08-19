@@ -68,6 +68,15 @@ class TestBuild(unittest.TestCase):
             os.path.join(self.build_path, "_site", "blog",
                          "2009", "07", "24", "post-2"))
 
+    def testGitSubmodule(self):
+        '''Test that when the ``_site`` directory is a submodule (contains a ``.git`` file), the ``.git`` file remains after the rebuild.'''
+        submodule_dir = '../.git/modules/foo-site.git'
+
+        main.main("init blog_unit_test")
+        open(os.path.join(self.build_path, '_site', '.git'), 'w').write(submodule_dir)
+        main.main("build")
+        assert submodule_dir in open(os.path.join(self.build_path, '_site', '.git')).read()
+
     def testNoPosts(self):
         """Test when there are no posts, site still builds cleanly"""
         main.main("init blog_unit_test")
