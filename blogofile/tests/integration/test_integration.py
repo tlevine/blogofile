@@ -37,7 +37,7 @@ class TestBlogofileCommands(unittest.TestCase):
         self._call_entry_point(['blogofile', 'build', '-s', src_dir])
         self.assertIn('_site', os.listdir(src_dir))
 
-    def testGitSubmodule(self):
+    def test_blogofile_build_git_submodule(self):
         '''
         When the `_site` directory is a submodule (contains a `.git` file),
         the `.git` file remains after the rebuild.'''
